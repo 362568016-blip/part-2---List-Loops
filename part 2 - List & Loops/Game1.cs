@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace part_2___List___Loops
 {
@@ -52,6 +53,18 @@ namespace part_2___List___Loops
             // TODO: use this.Content to load your game content here
 
             backgroundTexture = Content.Load<Texture2D>("Images/space_background");
+            for (int i = 0; i < 30; i++)
+            {
+                images.Add(Content.Load<Texture2D>("Images/asteroid" + i));
+            }
+            for (int i = 0; i < 30; i++)
+            {
+                images.Add(Content.Load<Texture2D>("Images/fireBomb.png" + i));
+            }
+            for (int i = 0; i < 30; i++)
+            {
+                images.Add(Content.Load<Texture2D>("Images/sun" + i));
+            }
 
         }
 
@@ -61,6 +74,11 @@ namespace part_2___List___Loops
                 Exit();
 
             // TODO: Add your update logic here
+            for (int i = 1; i <= 10; i++)
+            {
+                images.Add(Content.Load<Texture2D>("Images/space_background"));
+            }
+
 
             base.Update(gameTime);
         }
@@ -70,6 +88,9 @@ namespace part_2___List___Loops
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+
+            for (int i = 0;i < rects.Count; i++)
+                _spriteBatch.Draw(images[i], rects[i], Color.White);
 
             base.Draw(gameTime);
         }
