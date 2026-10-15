@@ -12,6 +12,12 @@ namespace part_2___List___Loops
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        Random generator;
+        Rectangle window;
+        Texture2D backgroundTexture;
+        List<Texture2D> textures;
+        List<Rectangle> plannetRects;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -23,20 +29,16 @@ namespace part_2___List___Loops
         {
             // TODO: Add your initialization logic here
 
-            Random generator;
-            Rectangle window;
-            Texture2D backgroundTexture;
-            List<Texture2D> images;
-            List<Rectangle> rects;
+            
 
             window = new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
             generator = new Random();
-            images = new List<Texture2D>();
-            rects = new List<Rectangle>();
+            textures = new List<Texture2D>();
+            plannetRects = new List<Rectangle>();
 
             for (int i = 0; i < 30; i++)
             {
-                rects.Add
+                plannetRects.Add
                     (
                     new Rectangle(generator.Next(window.Width - 25), generator.Next(window.Height - 25), 25, 25)
 
@@ -53,17 +55,9 @@ namespace part_2___List___Loops
             // TODO: use this.Content to load your game content here
 
             backgroundTexture = Content.Load<Texture2D>("Images/space_background");
-            for (int i = 0; i < 30; i++)
+            for (int i = 1; i < 14; i++)
             {
-                images.Add(Content.Load<Texture2D>("Images/asteroid" + i));
-            }
-            for (int i = 0; i < 30; i++)
-            {
-                images.Add(Content.Load<Texture2D>("Images/fireBomb.png" + i));
-            }
-            for (int i = 0; i < 30; i++)
-            {
-                images.Add(Content.Load<Texture2D>("Images/sun" + i));
+                textures.Add(Content.Load<Texture2D>("Images/16-bit-planet" + i));
             }
 
         }
@@ -74,10 +68,12 @@ namespace part_2___List___Loops
                 Exit();
 
             // TODO: Add your update logic here
-            for (int i = 1; i <= 10; i++)
+            for (int i = 1; i <= 13; i++)
             {
-                images.Add(Content.Load<Texture2D>("Images/space_background"));
+                textures.Add(Content.Load<Texture2D>("Images/space_background"));
             }
+            for (int i = 0; i < plannetRects.Count;i++)
+                textures.Add(textures[generator.Next(textures.Count)]);
 
 
             base.Update(gameTime);
@@ -89,9 +85,13 @@ namespace part_2___List___Loops
 
             // TODO: Add your drawing code here
 
-            for (int i = 0;i < rects.Count; i++)
-                _spriteBatch.Draw(images[i], rects[i], Color.White);
+            _spriteBatch.Begin();
 
+            _spriteBatch.Draw(backgroundTexture, window, Color.White);
+            for (int i = 0;i < plannetRects.Count; i++)
+                _spriteBatch.Draw(textures[0], plannetRects[i], Color.White);
+
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }
