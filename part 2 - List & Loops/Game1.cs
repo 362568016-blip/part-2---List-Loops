@@ -18,6 +18,9 @@ namespace part_2___List___Loops
         List<Texture2D> textures;
         List<Rectangle> plannetRects;
 
+
+        float seconds;
+        float respawnTime;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -31,20 +34,32 @@ namespace part_2___List___Loops
 
             
 
-            window = new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+            window = new Rectangle(0, 0, 800, 600);
             generator = new Random();
             textures = new List<Texture2D>();
             plannetRects = new List<Rectangle>();
 
+            _graphics.PreferredBackBufferWidth = window.Width;
+            _graphics.PreferredBackBufferHeight = window.Height;
+
+            _graphics.ApplyChanges();
+
             for (int i = 0; i < 30; i++)
             {
+
+                int size = generator.Next(20, 51);
+
                 plannetRects.Add
                     (
-                    new Rectangle(generator.Next(window.Width - 25), generator.Next(window.Height - 25), 25, 25)
+                    new Rectangle(generator.Next(window.Width - 25), generator.Next(window.Height - 25), size, size)
 
                     );
 
             }
+
+            seconds = 0f;
+
+            respawnTime = 3f;
             base.Initialize();
         }
 
@@ -55,25 +70,38 @@ namespace part_2___List___Loops
             // TODO: use this.Content to load your game content here
 
             backgroundTexture = Content.Load<Texture2D>("Images/space_background");
-            for (int i = 1; i < 14; i++)
+            for (int i = 1; i < 13; i++)
             {
-                textures.Add(Content.Load<Texture2D>("Images/16-bit-planet" + i));
+               textures.Add(Content.Load<Texture2D>("Images/16-bit-planet" + i));
             }
 
         }
 
         protected override void Update(GameTime gameTime)
         {
+            seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (seconds > respawnTime)
+            {
+                int size = generator.Next(20, 51);
+
+                plannetRects.Add
+                    (
+                    new Rectangle(generator.Next(window.Width - 25), generator.Next(window.Height - 25), size, size)
+
+                    );
+                seconds = 0;
+            }
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
             for (int i = 1; i <= 13; i++)
             {
-                textures.Add(Content.Load<Texture2D>("Images/space_background"));
+                //textures.Add(Content.Load<Texture2D>("Images/space_background"));
             }
             for (int i = 0; i < plannetRects.Count;i++)
                 textures.Add(textures[generator.Next(textures.Count)]);
+            
 
 
             base.Update(gameTime);
@@ -89,7 +117,7 @@ namespace part_2___List___Loops
 
             _spriteBatch.Draw(backgroundTexture, window, Color.White);
             for (int i = 0;i < plannetRects.Count; i++)
-                _spriteBatch.Draw(textures[0], plannetRects[i], Color.White);
+                _spriteBatch.Draw(textures[i], plannetRects[i], Color.White);
 
             _spriteBatch.End();
             base.Draw(gameTime);
