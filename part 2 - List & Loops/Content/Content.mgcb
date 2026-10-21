@@ -13,6 +13,14 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Counter.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/processorParam:Version=3.8.5.1
+/build:Counter.spritefont
+
 #begin Images/16-bit-planet1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -233,6 +241,14 @@
 /processorParam:TextureFormat=Color
 /processorParam:Version=3.8.5.1
 /build:Images/sun.png
+
+#begin Timer.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/processorParam:Version=3.8.5.1
+/build:Timer.spritefont
 
 #begin X:/My Drive/Downloads/planets/space_background.jpg
 /importer:TextureImporter

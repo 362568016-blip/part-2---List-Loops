@@ -17,10 +17,17 @@ namespace part_2___List___Loops
         Texture2D backgroundTexture;
         List<Texture2D> textures;
         List<Rectangle> plannetRects;
+        SpriteFont timer;
+        SpriteFont counter;
+
+        MouseState mouseState, previousMouseState;
 
 
         float seconds;
         float respawnTime;
+        float time;
+        float points;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -59,7 +66,7 @@ namespace part_2___List___Loops
 
             seconds = 0f;
 
-            respawnTime = 3f;
+            respawnTime = 2f;
             base.Initialize();
         }
 
@@ -70,6 +77,8 @@ namespace part_2___List___Loops
             // TODO: use this.Content to load your game content here
 
             backgroundTexture = Content.Load<Texture2D>("Images/space_background");
+            timer = Content.Load<SpriteFont>("Timer");
+            counter = Content.Load<SpriteFont>("Counter");
             for (int i = 1; i < 13; i++)
             {
                textures.Add(Content.Load<Texture2D>("Images/16-bit-planet" + i));
@@ -79,7 +88,10 @@ namespace part_2___List___Loops
 
         protected override void Update(GameTime gameTime)
         {
+            previousMouseState = mouseState;
+            mouseState = Mouse.GetState();
             seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            time += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (seconds > respawnTime)
             {
                 int size = generator.Next(20, 51);
@@ -90,11 +102,37 @@ namespace part_2___List___Loops
 
                     );
                 seconds = 0;
+
+                //points = points + 1;
             }
+
+            //time = 0f + 1f;
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
+
+            if (mouseState.LeftButton == ButtonState.Pressed && previousMouseState.LeftButton == ButtonState.Released)
+            {
+                for (int i = 0; i < plannetRects.Count; i++)
+                {
+                    if (plannetRects[i].Contains(mouseState.Position))
+                    {
+                        plannetRects.RemoveAt(i);
+                        textures.RemoveAt(i);
+                        i--;
+                        points = points + 1;
+
+                    }
+                }
+            }
+
+            if (plannetRects.Count == 0)
+            {
+                Exit();
+            }
+
             for (int i = 1; i <= 13; i++)
             {
                 //textures.Add(Content.Load<Texture2D>("Images/space_background"));
@@ -109,6 +147,7 @@ namespace part_2___List___Loops
 
         protected override void Draw(GameTime gameTime)
         {
+            
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
@@ -118,6 +157,9 @@ namespace part_2___List___Loops
             _spriteBatch.Draw(backgroundTexture, window, Color.White);
             for (int i = 0;i < plannetRects.Count; i++)
                 _spriteBatch.Draw(textures[i], plannetRects[i], Color.White);
+            _spriteBatch.DrawString(timer, (time + ""), new Vector2 (600, 10), Color.White);
+            _spriteBatch.DrawString(counter, (points + ""), new Vector2(730, 520), Color.Pink);
+            
 
             _spriteBatch.End();
             base.Draw(gameTime);
